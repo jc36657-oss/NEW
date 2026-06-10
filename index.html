@@ -9,8 +9,8 @@
     <link rel="manifest" href="./manifest.json">
     <title>Sniper</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-Bqg45r3y.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DQBWroJi.css">
+    <script type="module" crossorigin src="/assets/index-Dsrg-VHS.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DHsAiEtP.css">
   <link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
   <body>
     <div class="app-container">
@@ -97,29 +97,32 @@
       <div id="favorites-bar" class="favorites-bar"></div>
       
       <!-- Font Size Controller (Bottom Left) -->
-      <div class="font-selector-bottom" style="display:flex; gap:5px; align-items:center;">
-        <button class="font-btn" id="font-minus" title="Kecilkan Teks">A-</button>
-        <button class="font-btn" id="font-plus" title="Besarkan Teks">A+</button>
-        <button id="zoom-in-btn" class="font-btn" title="Zoom In (100 Candles)">🔍 100</button>
-        <button id="zoom-fit-btn" class="font-btn" title="Fit All">🔍 All</button>
-      <!-- Drawing Toolbar -->
-        <div id="draw-toolbar" style="display:flex; gap:2px; align-items:center; margin-left:4px; padding-left:4px; border-left:1px solid rgba(255,255,255,0.15);">
-          <button id="draw-horiz-btn" class="font-btn" title="Horizontal Line (1 click)" style="font-size:11px; padding:0 5px;">➖</button>
-          <button id="draw-trend-btn" class="font-btn" title="Trendline (2 clicks)" style="font-size:11px; padding:0 5px;">📐</button>
-          <div style="display:flex; gap:1px; align-items:center; margin:0 2px;">
-            <button class="draw-color-btn" data-color="#00E676" style="width:14px; height:14px; border-radius:50%; border:2px solid #00E676; background:#00E676; cursor:pointer; padding:0;" title="Green"></button>
-            <button class="draw-color-btn" data-color="#FF5252" style="width:14px; height:14px; border-radius:50%; border:2px solid #FF5252; background:#FF5252; cursor:pointer; padding:0;" title="Red"></button>
-            <button class="draw-color-btn" data-color="#FFEB3B" style="width:14px; height:14px; border-radius:50%; border:2px solid #FFEB3B; background:#FFEB3B; cursor:pointer; padding:0;" title="Yellow"></button>
-            <button class="draw-color-btn" data-color="#2196F3" style="width:14px; height:14px; border-radius:50%; border:2px solid #2196F3; background:#2196F3; cursor:pointer; padding:0;" title="Blue"></button>
-            <button class="draw-color-btn" data-color="#FFFFFF" style="width:14px; height:14px; border-radius:50%; border:2px solid #FFFFFF; background:#FFFFFF; cursor:pointer; padding:0;" title="White"></button>
+      <div class="font-selector-bottom" style="display:flex; gap:0; align-items:center;">
+        <button id="toolbar-toggle-btn" class="font-btn toolbar-toggle-btn" title="Show/Hide Toolbar (T)" style="font-size:11px; padding:0 7px; min-width:20px; border-right:1px solid rgba(255,255,255,0.2);">◀</button>
+        <div id="toolbar-content" style="display:flex; gap:0; align-items:center; overflow:hidden; transition: max-width 0.3s ease, opacity 0.25s ease;">
+          <button class="font-btn" id="font-minus" title="Kecilkan Teks">A-</button>
+          <button class="font-btn" id="font-plus" title="Besarkan Teks">A+</button>
+          <button id="zoom-in-btn" class="font-btn" title="Zoom In (100 Candles)">🔍 100</button>
+          <button id="zoom-fit-btn" class="font-btn" title="Fit All">🔍 All</button>
+        <!-- Drawing Toolbar -->
+          <div id="draw-toolbar" style="display:flex; gap:2px; align-items:center; margin-left:4px; padding-left:4px; border-left:1px solid rgba(255,255,255,0.15);">
+            <button id="draw-horiz-btn" class="font-btn" title="Horizontal Line (1 click)" style="font-size:11px; padding:0 5px;">➖</button>
+            <button id="draw-trend-btn" class="font-btn" title="Trendline (2 clicks)" style="font-size:11px; padding:0 5px;">📐</button>
+            <div style="display:flex; gap:1px; align-items:center; margin:0 2px;">
+              <button class="draw-color-btn" data-color="#00E676" style="width:14px; height:14px; border-radius:50%; border:2px solid #00E676; background:#00E676; cursor:pointer; padding:0;" title="Green"></button>
+              <button class="draw-color-btn" data-color="#FF5252" style="width:14px; height:14px; border-radius:50%; border:2px solid #FF5252; background:#FF5252; cursor:pointer; padding:0;" title="Red"></button>
+              <button class="draw-color-btn" data-color="#FFEB3B" style="width:14px; height:14px; border-radius:50%; border:2px solid #FFEB3B; background:#FFEB3B; cursor:pointer; padding:0;" title="Yellow"></button>
+              <button class="draw-color-btn" data-color="#2196F3" style="width:14px; height:14px; border-radius:50%; border:2px solid #2196F3; background:#2196F3; cursor:pointer; padding:0;" title="Blue"></button>
+              <button class="draw-color-btn" data-color="#FFFFFF" style="width:14px; height:14px; border-radius:50%; border:2px solid #FFFFFF; background:#FFFFFF; cursor:pointer; padding:0;" title="White"></button>
+            </div>
+            <button id="draw-style-btn" class="font-btn" title="Line Style: Solid → Dashed → Dotted" style="font-size:11px; padding:0 5px; min-width:24px;">━</button>
+            <button id="clear-lines-btn" class="font-btn" title="Clear All Lines" style="font-size:11px; padding:0 5px;">❌</button>
           </div>
-          <button id="draw-style-btn" class="font-btn" title="Line Style: Solid → Dashed → Dotted" style="font-size:11px; padding:0 5px; min-width:24px;">━</button>
-          <button id="clear-lines-btn" class="font-btn" title="Clear All Lines" style="font-size:11px; padding:0 5px;">❌</button>
-        </div>
-      <!-- AI Export Toolbar -->
-        <div id="ai-export-toolbar" style="display:flex; gap:2px; align-items:center; margin-left:4px; padding-left:4px; border-left:1px solid rgba(255,255,255,0.15);">
-          <button id="copy-data-btn" class="font-btn" title="Copy data JSON ke clipboard (C)" style="font-size:11px; padding:0 6px; white-space:nowrap;">📋 Copy</button>
-          <button id="export-data-btn" class="font-btn" title="Download data JSON (E)" style="font-size:11px; padding:0 6px; white-space:nowrap;">💾 Export</button>
+        <!-- AI Export Toolbar -->
+          <div id="ai-export-toolbar" style="display:flex; gap:2px; align-items:center; margin-left:4px; padding-left:4px; border-left:1px solid rgba(255,255,255,0.15);">
+            <button id="copy-data-btn" class="font-btn" title="Copy data JSON ke clipboard (C)" style="font-size:11px; padding:0 6px; white-space:nowrap;">📋 Copy</button>
+            <button id="export-data-btn" class="font-btn" title="Download data JSON (E)" style="font-size:11px; padding:0 6px; white-space:nowrap;">💾 Export</button>
+          </div>
         </div>
       </div>
 
