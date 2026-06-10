@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="./manifest.json">
+    <title>Sniper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/assets/index-5clcPPwu.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DQBWroJi.css">
+  <link rel="manifest" href="/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/registerSW.js"></script></head>
+  <body>
+    <div class="app-container">
+      <main id="single-chart-container">
+        <!-- Single chart will be injected here -->
+      </main>
+
+      <!-- Coin Selector Modal -->
+      <div id="coin-selector-modal" class="modal-overlay">
+        <div class="modal-content">
+          <div class="modal-header">
+            <input type="text" id="coin-search" placeholder="Search symbol..." autocomplete="off" />
+            <button id="toggle-favorites" class="fav-filter-btn" title="Toggle Favorites Only">⭐ Favorites</button>
+          </div>
+          <div class="modal-list-header">
+            <div class="col-symbol">Symbol</div>
+            <div class="col-price">Last Price</div>
+            <div class="col-change" id="sort-change" style="cursor:pointer;" title="Sort by 24h Change">24h Chg ↕</div>
+          </div>
+          <div id="coin-list" class="modal-list">
+            <div class="loading-text">Loading USDT Futures...</div>
+          </div>
+        </div> <!-- Penutup modal-content -->
+      </div> <!-- Penutup modal-overlay -->
+
+      <!-- Scanner Floating Panel -->
+      <div id="scanner-panel" style="display: none; position: absolute; left: 10px; bottom: 60px; width: 280px; background: rgba(20, 24, 35, 0.95); border: 1px solid #333; border-radius: 6px; z-index: 100; flex-direction: column; box-shadow: 0 4px 12px rgba(0,0,0,0.5); backdrop-filter: blur(10px);">
+        <div class="modal-header" style="justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #333;">
+          <button id="force-scan-btn" style="background: none; border: none; color: #089981; cursor: pointer; font-size: 12px; font-weight: bold; margin: 0; padding: 0;">🔄 Rescan</button>
+          <div>
+            <button id="minimize-scanner-btn" style="background: none; border: none; color: #b2b5be; cursor: pointer; font-size: 14px; margin-right: 8px;" title="Minimize">_</button>
+          </div>
+        </div>
+        <div id="scanner-panel-body" style="display: flex; flex-direction: column;">
+          <div id="scanner-list" class="modal-list" style="max-height: 250px; overflow-y: auto;">
+            <div class="loading-text" id="scanner-status" style="font-size: 11px;">Ready to scan...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- cRSI Scanner Floating Panel -->
+      <div id="crsi-scanner-panel" style="display: none; position: absolute; left: 300px; bottom: 60px; width: 280px; background: rgba(20, 24, 35, 0.95); border: 1px solid #333; border-radius: 6px; z-index: 100; flex-direction: column; box-shadow: 0 4px 12px rgba(0,0,0,0.5); backdrop-filter: blur(10px);">
+        <div class="modal-header" style="justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #333;">
+          <button id="force-crsi-scan-btn" style="background: none; border: none; color: #f23645; cursor: pointer; font-size: 12px; font-weight: bold; margin: 0; padding: 0;">🔥 Rescan</button>
+          <div>
+            <button id="minimize-crsi-scanner-btn" style="background: none; border: none; color: #b2b5be; cursor: pointer; font-size: 14px; margin-right: 8px;" title="Minimize">_</button>
+          </div>
+        </div>
+        <div id="crsi-scanner-panel-body" style="display: flex; flex-direction: column;">
+          <div id="crsi-scanner-list" class="modal-list" style="max-height: 250px; overflow-y: auto;">
+            <div class="loading-text" id="crsi-scanner-status" style="font-size: 11px;">Ready to scan cRSI...</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="toast-container" class="toast-container"></div>
+      
+      <!-- Control Panel (Refresh & TF Selector) -->
+      <div class="control-panel">
+        <button class="refresh-button" id="refresh-btn" title="Refresh App (F5)" onclick="location.reload()">🔄</button>
+        <button class="refresh-button" id="scan-trend-btn" title="Scan Trend (MA7 & MA25 > EMA50)" style="color: #089981; font-weight: bold; width: auto; padding: 0 8px; font-size: 11px;">🚀 SCAN</button>
+        <button class="refresh-button" id="crsi-scan-btn" title="Scan coins with cRSI>70 on 5m AND 15m" style="color: #f23645; font-weight: bold; width: auto; padding: 0 8px; font-size: 11px;">🔥 cRSI</button>
+        <button class="refresh-button" id="snap-btn" title="Kunci Jendela ke Ukuran Pas untuk 6 Kotak (3 Kolom x 2 Baris)" style="color: #ff9800; font-weight: bold;">🔒</button>
+        <div class="tf-selector">
+          <button class="tf-btn active" data-tf="1m">1</button>
+          <button class="tf-btn" data-tf="3m">3</button>
+          <button class="tf-btn" data-tf="5m">5</button>
+          <button class="tf-btn" data-tf="15m">15</button>
+          <button class="tf-btn" data-tf="30m">30</button>
+          <button class="tf-btn" data-tf="1h">1h</button>
+          <button class="tf-btn" data-tf="2h">2h</button>
+          <button class="tf-btn" data-tf="4h">4h</button>
+          <button class="tf-btn" data-tf="6h">6h</button>
+          <button class="tf-btn" data-tf="8h">8h</button>
+          <button class="tf-btn" data-tf="12h">12h</button>
+          <button class="tf-btn" data-tf="1d">1D</button>
+          <button class="tf-btn" data-tf="3d">3D</button>
+          <button class="tf-btn" data-tf="1w">1W</button>
+          <button class="tf-btn" data-tf="1M">1M</button>
+        </div>
+      </div>
+      
+      <!-- Quick Favorites Bar -->
+      <div id="favorites-bar" class="favorites-bar"></div>
+      
+      <!-- Font Size Controller (Bottom Left) -->
+      <div class="font-selector-bottom" style="display:flex; gap:5px; align-items:center;">
+        <button class="font-btn" id="font-minus" title="Kecilkan Teks">A-</button>
+        <button class="font-btn" id="font-plus" title="Besarkan Teks">A+</button>
+        <button id="zoom-in-btn" class="font-btn" title="Zoom In (100 Candles)">🔍 100</button>
+        <button id="zoom-fit-btn" class="font-btn" title="Fit All">🔍 All</button>
+      <!-- Drawing Toolbar -->
+        <div id="draw-toolbar" style="display:flex; gap:2px; align-items:center; margin-left:4px; padding-left:4px; border-left:1px solid rgba(255,255,255,0.15);">
+          <button id="draw-horiz-btn" class="font-btn" title="Horizontal Line (1 click)" style="font-size:11px; padding:0 5px;">➖</button>
+          <button id="draw-trend-btn" class="font-btn" title="Trendline (2 clicks)" style="font-size:11px; padding:0 5px;">📐</button>
+          <div style="display:flex; gap:1px; align-items:center; margin:0 2px;">
+            <button class="draw-color-btn" data-color="#00E676" style="width:14px; height:14px; border-radius:50%; border:2px solid #00E676; background:#00E676; cursor:pointer; padding:0;" title="Green"></button>
+            <button class="draw-color-btn" data-color="#FF5252" style="width:14px; height:14px; border-radius:50%; border:2px solid #FF5252; background:#FF5252; cursor:pointer; padding:0;" title="Red"></button>
+            <button class="draw-color-btn" data-color="#FFEB3B" style="width:14px; height:14px; border-radius:50%; border:2px solid #FFEB3B; background:#FFEB3B; cursor:pointer; padding:0;" title="Yellow"></button>
+            <button class="draw-color-btn" data-color="#2196F3" style="width:14px; height:14px; border-radius:50%; border:2px solid #2196F3; background:#2196F3; cursor:pointer; padding:0;" title="Blue"></button>
+            <button class="draw-color-btn" data-color="#FFFFFF" style="width:14px; height:14px; border-radius:50%; border:2px solid #FFFFFF; background:#FFFFFF; cursor:pointer; padding:0;" title="White"></button>
+          </div>
+          <button id="draw-style-btn" class="font-btn" title="Line Style: Solid → Dashed → Dotted" style="font-size:11px; padding:0 5px; min-width:24px;">━</button>
+          <button id="clear-lines-btn" class="font-btn" title="Clear All Lines" style="font-size:11px; padding:0 5px;">❌</button>
+        </div>
+      <!-- AI Export Toolbar -->
+        <div id="ai-export-toolbar" style="display:flex; gap:2px; align-items:center; margin-left:4px; padding-left:4px; border-left:1px solid rgba(255,255,255,0.15);">
+          <button id="copy-data-btn" class="font-btn" title="Copy data JSON ke clipboard (C)" style="font-size:11px; padding:0 6px; white-space:nowrap;">📋 Copy</button>
+          <button id="export-data-btn" class="font-btn" title="Download data JSON (E)" style="font-size:11px; padding:0 6px; white-space:nowrap;">💾 Export</button>
+        </div>
+      </div>
+
+      <!-- cRSI Cycle Length Controller (Bottom Right) -->
+      <div class="crsi-control-bottom" style="position:absolute; bottom:35px; right:10px; z-index:9999; display:flex; align-items:center; background:rgba(42, 46, 57, 0.9); border:1px solid rgba(197, 203, 206, 0.2); border-radius:6px; overflow:hidden; backdrop-filter:blur(4px); box-shadow:0 4px 6px rgba(0,0,0,0.5); height:32px; padding:0 6px; gap:4px; font-family:Inter,sans-serif;">
+        <button id="crsi-toggle" class="font-btn" style="font-size:13px; padding:0 5px; min-width:26px; height:24px; cursor:pointer; border-right:1px solid rgba(255,255,255,0.1);" title="Show/Hide cRSI">👁</button>
+        <button id="crsi-minus" class="font-btn" style="font-size:14px; padding:0 6px; min-width:28px; height:24px; font-weight:bold; cursor:pointer;">−</button>
+        <input id="crsi-value" type="number" min="10" max="200" step="2" value="20" style="width:45px; height:24px; text-align:center; background:#1a1a2e; color:#fff; border:1px solid #555; border-radius:4px; font-size:12px; padding:0; font-weight:bold; font-family:Inter,sans-serif; cursor:pointer; -moz-appearance:textfield;" />
+        <button id="crsi-plus" class="font-btn" style="font-size:14px; padding:0 6px; min-width:28px; height:24px; font-weight:bold; cursor:pointer;">+</button>
+      </div>
+
+    </div> <!-- Penutup app-container -->
+  </body>
+</html>
